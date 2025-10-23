@@ -167,5 +167,34 @@
 			};
 		};
     </script>
+	<script>
+      // Simple local save system for Cave Story
+      function saveGame(level, hp) {
+        const progress = { level, hp };
+        localStorage.setItem("cavestorySave", JSON.stringify(progress));
+        alert("Game saved!");
+      }
+
+      function loadGame() {
+        const data = localStorage.getItem("cavestorySave");
+        if (!data) {
+          alert("No save found!");
+          return null;
+        }
+        const progress = JSON.parse(data);
+        alert(`Loaded progress: Level ${progress.level}, HP ${progress.hp}`);
+        return progress;
+      }
+
+      // Example: runs when the page first loads
+      window.addEventListener("load", () => {
+        const save = loadGame();
+        if (save) {
+          console.log("Loaded progress:", save);
+        } else {
+          console.log("No save found yet.");
+        }
+      });
+    </script>
 </body>
 </html>
