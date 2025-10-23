@@ -165,6 +165,24 @@
 				}
 			};
 		};
+		    // 🧩 Added code below: this enables local save files
+    Module['preRun'].push(() => {
+        try {
+            FS.mkdir('/save');
+        } catch (e) {
+            // folder already exists
+        }
+        FS.mount(IDBFS, {}, '/save');
+        FS.syncfs(true, function (err) {
+            console.log("Loaded previous save data", err || "");
+        });
+    });
+		window.addEventListener('beforeunload', () => {
+        FS.syncfs(false, function (err) {
+            console.log("Game progress saved locally!", err || "");
+        });
+    });
+    // 🧩 End of added code
     </script>
 </body>
 </html>
