@@ -165,24 +165,22 @@
 				}
 			};
 		};
-		    // 🧩 Added code below: this enables local save files
-    Module['preRun'].push(() => {
-        try {
-            FS.mkdir('/save');
-        } catch (e) {
-            // folder already exists
-        }
-        FS.mount(IDBFS, {}, '/save');
-        FS.syncfs(true, function (err) {
-            console.log("Loaded previous save data", err || "");
-        });
-    });
-		window.addEventListener('beforeunload', () => {
-        FS.syncfs(false, function (err) {
-            console.log("Game progress saved locally!", err || "");
-        });
-    });
-    // 🧩 End of added code
-    </script>
+Module['preRun'].push(() => {
+  // Use the same folder where Cave Story stores saves
+  try {
+    FS.mkdir('/Doukutsu');
+  } catch (e) {}
+  FS.mount(IDBFS, {}, '/Doukutsu');
+  FS.syncfs(true, function (err) {
+    console.log("Loaded save data from /Doukutsu", err || "");
+  });
+});
+
+window.addEventListener('beforeunload', () => {
+  FS.syncfs(false, function (err) {
+    console.log("Saved progress to browser storage", err || "");
+  });
+});
+</script>
 </body>
 </html>
